@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: demo-vm
+  name: skupper
 spec:
   generators:
   # Only select external clusters, excludes local cluster
@@ -18,9 +18,8 @@ spec:
         repoURL: https://github.com/rmallam/RHSI-Hackathon.git
         targetRevision: HEAD
         path: "online-boutique/Annotations"
-        kustomize:
-          commonAnnotations:
-            managed-cluster: "{{nameNormalized}}"
+        directory:
+          recurse: true
       destination:
         server: "{{server}}"
         namespace: skupper
