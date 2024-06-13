@@ -16,7 +16,7 @@ spec:
       project: default
       source:
         repoURL: https://github.com/rmallam/RHSI-Hackathon.git
-        targetRevision: HEAD
+        targetRevision: main
         path: "online-boutique/Annotations"
         directory:
           recurse: true
