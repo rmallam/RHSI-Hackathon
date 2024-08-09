@@ -2,8 +2,8 @@ name: RHSI-Hackathon-setup-env
 
 env:
 
-  ONPREM_OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_ONPREM_SERVER }}
-  ONPREM_OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_ONPREM_TOKEN }}
+  OPENSHIFT_SERVER: ${{ secrets.OPENSHIFT_ONPREM_SERVER }}
+  OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_ONPREM_TOKEN }}
   # 🖊️ EDIT to set the kube context's namespace after login. Leave blank to use your user's default namespace.
   OPENSHIFT_NAMESPACE: ""
 
@@ -54,12 +54,11 @@ jobs:
     - name: Helm tool installer
       uses: Azure/setup-helm@v3
 
-    # https://github.com/redhat-actions/oc-login#readme
     - name: Log in to aws OpenShift
       uses: redhat-actions/oc-login@v1
       with:
-        openshift_server_url: ${{ env.OPENSHIFT_ONPREM_SERVER }}
-        openshift_token: ${{ env.OPENSHIFT_ONPREM_TOKEN }}
+        openshift_server_url: ${{ env.OPENSHIFT_SERVER }}
+        openshift_token: ${{ env.OPENSHIFT_TOKEN }}
         insecure_skip_tls_verify: true
         namespace: ${{ env.OPENSHIFT_NAMESPACE }}
         kubeconfig: /tmp/aws
