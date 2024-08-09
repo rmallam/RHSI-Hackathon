@@ -58,8 +58,8 @@ jobs:
     - name: Log in to aws OpenShift
       uses: redhat-actions/oc-login@v1
       with:
-        openshift_server_url: ${{ env.ONPREM_OPENSHIFT_SERVER }}
-        openshift_token: ${{ env.ONPREM_OPENSHIFT_TOKEN }}
+        openshift_server_url: ${{ env.OPENSHIFT_ONPREM_SERVER }}
+        openshift_token: ${{ env.OPENSHIFT_ONPREM_TOKEN }}
         insecure_skip_tls_verify: true
         namespace: ${{ env.OPENSHIFT_NAMESPACE }}
         kubeconfig: /tmp/aws
