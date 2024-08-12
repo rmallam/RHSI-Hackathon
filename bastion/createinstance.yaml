@@ -6,6 +6,26 @@
     ansible_python_interpreter: /Users/rakeshkumarmallam/pyenv/bin/python
     random_suffix: "{{ 100000 | random }}"
   tasks:	
+
+    - name: Create security group
+      amazon.aws.ec2_group:
+        name: bastion-sg-group
+        description: "Security group with all inbound and outbound traffic allowed"
+        vpc_id: vpc-0726b9fbe48802a9a
+        rules:
+          - proto: all
+            from_port: 0
+            to_port: 0
+            cidr_ip: 0.0.0.0/0
+        rules_egress:
+          - proto: all
+            from_port: 0
+            to_port: 0
+            cidr_ip: 0.0.0.0/0
+        state: present
+        tags:
+          Name: open-security-group
+      register: sg
 # launches multiple instances - specific number of instances
     - name: start specific number of multiple instances
       amazon.aws.ec2_instance:
@@ -16,7 +36,7 @@
         image_id: ami-0a6b545f62129c495
         network:
           assign_public_ip: true
-        security_group: sg-0006c2dc5d625ce7c
+        security_group: "{{ sg.group_id }}"
         vpc_subnet_id: subnet-0a95ff9ab7d1428c8
         state: present
         tags:
