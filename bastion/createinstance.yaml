@@ -5,6 +5,14 @@
   vars:
     ansible_python_interpreter: /Users/rakeshkumarmallam/pyenv/bin/python
     random_suffix: "{{ 100000 | random }}"
+    instance_type: "t3.micro"
+    image_id: "ami-0a6b545f62129c495"  
+    key_name: "hackathon" 
+    vpc_subnet_id: "subnet-0a95ff9ab7d1428c8" 
+    instance_name: "MyInstance-{{ random_suffix }}"
+    ansible_user: "ec2-user"  
+
+
   tasks:	
 
     - name: Create security group
@@ -30,14 +38,14 @@
     - name: start specific number of multiple instances
       amazon.aws.ec2_instance:
         name: hackathon-bastion-{{ random_suffix }}
-        instance_type: t3.small
-        key_name: hackathon
+        instance_type: "{{ instance_type }}"
+        key_name: "{{ key_name }}"
         user_data: "{{ lookup('file', 'user-data.sh') }}"
-        image_id: ami-0a6b545f62129c495
+        image_id: "{{ image_id }}"
         network:
           assign_public_ip: true
         security_group: "{{ sg.group_id }}"
-        vpc_subnet_id: subnet-0a95ff9ab7d1428c8
+        vpc_subnet_id: "{{ vpc_subnet_id }}"
         state: present
         tags:
           usage: hackathon 
