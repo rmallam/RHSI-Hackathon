@@ -1,0 +1,36 @@
+---
+- name: create instance
+  gather_facts: false
+  hosts: localhost
+  vars:
+    ansible_python_interpreter: /Users/rakeshkumarmallam/pyenv/bin/python
+    random_suffix: "{{ 100000 | random }}"
+  tasks:	
+# launches multiple instances - specific number of instances
+    - name: start specific number of multiple instances
+      amazon.aws.ec2_instance:
+        name: hackathon-bastion-{{ random_suffix }}
+        instance_type: t3.small
+        key_name: hackathon
+        user_data: "{{ lookup('file', 'user-data.sh') }}"
+        image_id: ami-0a6b545f62129c495
+        network:
+          assign_public_ip: true
+        security_group: sg-0006c2dc5d625ce7c
+        vpc_subnet_id: subnet-0a95ff9ab7d1428c8
+        state: present
+        tags:
+          usage: hackathon 
+      register: ec2  # Register the output of the task
+
+    - name: Set public IP as a fact
+      set_fact:
+        ec2_public_ip: "{{ ec2.instances[0].public_ip_address }}"
+        
+    - name: Wait for SSH to become available
+      wait_for:
+        host: "{{ ec2.instances[0].public_ip_address }}"
+        port: 22
+        delay: 60
+        timeout: 320
+        state: started
